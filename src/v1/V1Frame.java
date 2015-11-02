@@ -4,30 +4,34 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Collections;
+
 import javax.swing.*;
 import javax.swing.event.*;
 
 @SuppressWarnings("serial")
 public class V1Frame extends JFrame
 {
-    private Container c;
-    private JPanel pInputName;
-    private JPanel pDisplayNameList;
-    private JPanel pOptionButtons;
-    private JPanel pButtonCenterBox;
-
-    private JTextField nameInputField;
-    private JList<String> nameJList;
-    private JButton bLoad;
-    private JButton bAdd;
-    private JButton bDelete;
 
     private DefaultListModel<String> defaultList;
     private ArrayList<String> arrayList;                    // bessere Lösung?
+    private static final String[] defaultNames= {"Abel", "Galler", "Huber", "Irber", "Kugler", "Schuster"};
     
     public V1Frame(String title)
     {
         super(title);
+
+        Container c;
+        JPanel pInputName;
+        JPanel pDisplayNameList;
+        JPanel pOptionButtons;
+        JPanel pButtonCenterBox;
+
+        JTextField nameInputField;
+        JList<String> nameJList;
+        JButton bLoad;
+        JButton bDelete;
+        JButton bAdd;
+        
         c = this.getContentPane();
         
         // initialize Panels
@@ -40,47 +44,26 @@ public class V1Frame extends JFrame
         nameInputField = new JTextField();
         
         // add documentListener to input field
-        nameInputField.getDocument().addDocumentListener(new DocumentListener()
-            {
-                public void changedUpdate(DocumentEvent textEvent)
-                {
-                    hasText();
-                }
-                public void removeUpdate(DocumentEvent textEvent)
-                {
-                    hasText();
-                }
-                public void insertUpdate(DocumentEvent textEvent)
-                {
-                    hasText();
-                }
-                private void hasText()
-                {
-                    if (nameInputField.getText().equals(""))
-                    {
-                        bAdd.setEnabled(false);
-                    }
-                    else
-                    {
-                        bAdd.setEnabled(true);
-                    }
-                }
-            });
+       
         
         // initialize components name list panel
         arrayList = new ArrayList<String>();
         defaultList = new DefaultListModel<String>();
         this.fillListDefaultNames();
         nameJList = new JList<String>(defaultList);
-        //nameJList.setVisibleRowCount(10);                                                     // Keine Auswirkung, Fragen im Praktikum? Vllt wegen Layoutmanager?
+        nameJList.setVisibleRowCount(10);                                                     // Keine Auswirkung, Fragen im Praktikum? Vllt wegen Layoutmanager?
         nameJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         nameJList.setBorder(BorderFactory.createLineBorder(new Color(0,0,0)));
         
         // initialize components option button panel
         bLoad = new JButton("Laden");
+        bLoad.setMnemonic(KeyEvent.VK_L);
         bAdd = new JButton("Hinzufügen");
+        bAdd.setMnemonic(KeyEvent.VK_H);
         bAdd.setEnabled(false);
         bDelete = new JButton("Entfernen");
+        bDelete.setMnemonic(KeyEvent.VK_E);
+        bDelete.setEnabled(false);
         
         // add action listener to buttons
         bLoad.addActionListener(new ActionListener()
@@ -104,27 +87,70 @@ public class V1Frame extends JFrame
                             Collections.sort(arrayList);
                             repopulateList();
                         }
+                        else
+                        {
+                        	JOptionPane.showMessageDialog(null , "Der Name existiert bereits.", "Name existiert", JOptionPane.WARNING_MESSAGE);
+                        }
                     }
                 });
+        
+        nameInputField.getDocument().addDocumentListener(new DocumentListener()
+        {
+            public void changedUpdate(DocumentEvent textEvent)
+            {
+                hasText();
+            }
+            public void removeUpdate(DocumentEvent textEvent)
+            {
+                hasText();
+            }
+            public void insertUpdate(DocumentEvent textEvent)
+            {
+                hasText();
+            }
+            public void hasText()
+            {
+                if (bAdd!=null && nameInputField.getText().trim().isEmpty())
+                {
+               		bAdd.setEnabled(false);
+                }
+                else
+                {
+               		bAdd.setEnabled(true);
+                }
+            }
+        });
         
         bDelete.addActionListener(new ActionListener()
                 {
                     public void actionPerformed(ActionEvent deleteEvent)
                     {
-                        if (nameJList.isSelectionEmpty())
+                        
+                        if (JOptionPane.showConfirmDialog(null , "Wollen sie die Namensliste wirklich löschen?", "Namens aus liste entfernen", JOptionPane.WARNING_MESSAGE) == JOptionPane.YES_OPTION)
                         {
-                            JOptionPane.showMessageDialog(null, "Bitte wählen Sie zunächst einen Namen zum Entfernen aus der Liste aus.", "Kein Name ausgewählt", JOptionPane.INFORMATION_MESSAGE);
-                        }
-                        else
-                        {
-                            if (JOptionPane.showConfirmDialog(null , "Wollen sie die Namensliste wirklich löschen?", "Namens aus liste entfernen", JOptionPane.WARNING_MESSAGE) == JOptionPane.YES_OPTION)
-                            {
-                                arrayList.remove(nameJList.getSelectedValue());
-                                repopulateList();
-                            }
+                            arrayList.remove(nameJList.getSelectedValue());
+                            repopulateList();
                         }
                     }
                 });
+        nameJList.addListSelectionListener(new ListSelectionListener()
+		        {
+
+					@Override
+					public void valueChanged(ListSelectionEvent selectedName) 
+					{
+							if (!nameJList.isSelectionEmpty())
+							{
+								bDelete.setEnabled(true);
+							}
+							else
+							{
+								bDelete.setEnabled(false);
+							}
+					}
+		        	
+		        });
+        
         
         
         // add components to input name panel
@@ -162,12 +188,10 @@ public class V1Frame extends JFrame
     private void fillListDefaultNames()
     {
         arrayList.clear();
-        arrayList.add("Abel");
-        arrayList.add("Galler");
-        arrayList.add("Huber");
-        arrayList.add("Irber");
-        arrayList.add("Kugler");
-        arrayList.add("Schuster");
+        for (String name : defaultNames)
+        {
+        	arrayList.add(name);
+        }
         this.repopulateList();
     }
     private void repopulateList()
@@ -181,8 +205,16 @@ public class V1Frame extends JFrame
     
     public static void main(String[] args) 
     {
-        V1Frame f1 = new V1Frame("test");
-        f1.setVisible(true);
+    	SwingUtilities.invokeLater(new Runnable()
+		    	{
+    				@Override
+		    		public void run()
+		    		{
+		    			V1Frame f1 = new V1Frame("Versuch1");
+		    			f1.setVisible(true);
+		    		}
+		    	});
+
     }
 
 }

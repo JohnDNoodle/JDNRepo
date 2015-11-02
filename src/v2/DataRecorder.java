@@ -13,21 +13,18 @@ public class DataRecorder
         aktrp = 0;
     }
     
-    public void record(float mw)
+    public void record(float mw)  
     {
         mwarr[aktrp] = mw;
         aktrp++;
-        if (aktrp%asize == 0)
-        {
-            aktrp = 0;
-        }
+        aktrp = aktrp % asize;
     }
     
     public float[] getBlock(int anz)
     {
         if (anz > asize)
         {
-            return null;
+            anz=asize;
         }
         float[] retMWArray = new float[anz];
         for ( int i = 0; i < anz; i++)

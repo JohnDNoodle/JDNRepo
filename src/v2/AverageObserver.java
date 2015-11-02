@@ -18,13 +18,16 @@ public class AverageObserver implements Observer
     @Override
     public void update(Publisher pub) 
     {
-        cnt++;
-        if (cnt >=5) // größer gleich falls cnt > anz um endlosschleife abzufangen?
-        {
-            blk = ((PubDataRecorder)pub).getBlock(anz);
-            System.out.println("Mittelwert: " + compAverage());
-            cnt = 0;
-        }
+    	if (pub == pdr)
+    	{
+    		cnt++;
+	        if (cnt >=5) // größer gleich falls cnt > anz um endlosschleife abzufangen?
+	        {
+	            blk = ((PubDataRecorder)pub).getBlock(anz);
+	            System.out.println("Mittelwert: " + compAverage());
+	            cnt = 0;
+	        }
+    	}
         
     }
     

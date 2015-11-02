@@ -14,10 +14,13 @@ public class MaxLimitObserver implements Observer
     @Override
     public void update(Publisher pub) 
     {
-        if (((PubDataRecorder)pub).getLast() > limit) // pub typecasten oder pdr benutzen?
-        {
-            System.out.println("Alarm: Messwertueberschreitung");
-        }
+    	if(pub == pdr)
+    	{
+	        if (((PubDataRecorder)pub).getLast() > limit) // pub typecasten oder pdr benutzen?
+	        {
+	            System.out.println("Alarm: Messwertueberschreitung");
+	        }
+    	}
     }
 
 }
