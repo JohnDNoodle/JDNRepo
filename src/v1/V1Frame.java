@@ -72,7 +72,7 @@ public class V1Frame extends JFrame
         defaultList = new DefaultListModel<String>();
         this.fillListDefaultNames();
         nameJList = new JList<String>(defaultList);
-        //nameJList.setVisibleRowCount(10);                                                     //Fragen im Praktikum
+        //nameJList.setVisibleRowCount(10);                                                     // Keine Auswirkung, Fragen im Praktikum? Vllt wegen Layoutmanager?
         nameJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         nameJList.setBorder(BorderFactory.createLineBorder(new Color(0,0,0)));
         
@@ -87,8 +87,7 @@ public class V1Frame extends JFrame
                 {
                     public void actionPerformed(ActionEvent loadEvent)
                     {
-                        JOptionPane LoadDialog = new JOptionPane("Namensliste löschen");
-                        if (LoadDialog.showConfirmDialog(null , "Wollen sie die Namensliste wirklich löschen?")== JOptionPane.YES_OPTION)
+                        if (JOptionPane.showConfirmDialog(null , "Wollen sie die Namensliste wirklich löschen?", "Namensliste löschen", JOptionPane.WARNING_MESSAGE)== JOptionPane.YES_OPTION)
                         {
                             fillListDefaultNames();
                         }
@@ -112,11 +111,17 @@ public class V1Frame extends JFrame
                 {
                     public void actionPerformed(ActionEvent deleteEvent)
                     {
-                        JOptionPane DeleteDialog = new JOptionPane("Namens aus liste entfernen");
-                        if (DeleteDialog.showConfirmDialog(null , "Wollen sie die Namensliste wirklich löschen?")== JOptionPane.YES_OPTION)
+                        if (nameJList.isSelectionEmpty())
                         {
-                            arrayList.remove(nameJList.getSelectedValue());
-                            repopulateList();
+                            JOptionPane.showMessageDialog(null, "Bitte wählen Sie zunächst einen Namen zum Entfernen aus der Liste aus.", "Kein Name ausgewählt", JOptionPane.INFORMATION_MESSAGE);
+                        }
+                        else
+                        {
+                            if (JOptionPane.showConfirmDialog(null , "Wollen sie die Namensliste wirklich löschen?", "Namens aus liste entfernen", JOptionPane.WARNING_MESSAGE) == JOptionPane.YES_OPTION)
+                            {
+                                arrayList.remove(nameJList.getSelectedValue());
+                                repopulateList();
+                            }
                         }
                     }
                 });
