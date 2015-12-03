@@ -96,7 +96,7 @@ MString& MString::operator+=(const MString &pstring)
 	if((len + pstring.len) > maxlen)
 	{
 		char tempArr[len];
-		strncpy(tempArr, cp, len);
+		memcpy(tempArr, cp, len * sizeof(char));
 		delete [] cp;
 		maxlen = len + pstring.len;
 		cp = new char[maxlen];

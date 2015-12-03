@@ -87,7 +87,7 @@ int main()  {
 	sonder+=MString('\0');
 	sonder+=MString('\0');
 	check("sonder[5]                : ", sonder[5], '\0');
-	//check("sonder[6]                : ", sonder[6], '\3');
+	check("sonder[6]                : ", sonder[6], '\3');
 	check("sonder[7]                : ", sonder[7], '\0');
 	check("sonder[8]                : ", sonder[8], '\0');
 	check("sonder -> sonder.length(): ", sonder.length(), 9u);
