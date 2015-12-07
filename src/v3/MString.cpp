@@ -8,6 +8,7 @@
 #include "MString.h"
 #include <cstring>
 #include <iostream>
+#include <cstdlib>
 
 
 
@@ -58,7 +59,7 @@ MString::MString(const MString &copy)
 	len = copy.len;
 	maxlen = copy.maxlen;
 	cp = new char[maxlen];
-	strncpy(cp, copy.cp, maxlen);
+	memcpy(cp, copy.cp, maxlen * sizeof(char));
 }
 
 MString::~MString()
@@ -72,7 +73,7 @@ void MString::conOut() const
 	{
 		for(unsigned i = 0; i < len; i++)
 			cout << cp[i];
-		cout << endl;
+		//cout << endl;
 	}
 }
 
@@ -87,7 +88,7 @@ MString& MString::operator=(const MString& zstring)
 			maxlen = zstring.maxlen;
 			cp = new char[maxlen];
 		}
-		strncpy(cp, zstring.cp, len);
+		memcpy(cp, zstring.cp, len * sizeof(char));
 	}
 	return *this;
 }
@@ -95,13 +96,21 @@ MString& MString::operator+=(const MString &pstring)
 {
 	if((len + pstring.len) > maxlen)
 	{
-		char tempArr[len];
+		maxlen = len + pstring.len;
+		char *tempArr = new char[maxlen];
+		memcpy(tempArr, cp, len * sizeof(char));
+		delete [] cp;
+		cp = tempArr;
+		/*// ursprüngliche version
+		char tempArr[len];							//Ändern
 		memcpy(tempArr, cp, len * sizeof(char));
 		delete [] cp;
 		maxlen = len + pstring.len;
 		cp = new char[maxlen];
 		memcpy(cp, tempArr, len*sizeof(char));
 		delete [] tempArr;
+		*/
+
 	}
 	memcpy(cp+len, pstring.cp, pstring.len*sizeof(char));
 	len+=pstring.len;
@@ -117,6 +126,7 @@ char MString::operator[](unsigned i) const
 	else
 	{
 		cerr << "Index not in range!" << endl;
+		exit(EXIT_FAILURE);
 	}
 	return ret;
 }
@@ -126,12 +136,12 @@ bool MString::operator==(const MString& cstring) const
 	if(len == cstring.len)
 	{
 		ret = true;
-		for(unsigned i = 0; i < len; i++)
+		for(unsigned i = 0; i < len && ret; i++)
 		{
 			if(cp[i] != cstring.cp[i])
 			{
 				ret = false;
-				break;
+
 			}
 		}
 	}

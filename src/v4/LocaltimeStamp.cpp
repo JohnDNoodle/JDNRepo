@@ -22,14 +22,20 @@ LocaltimeStamp::LocaltimeStamp(const Date &d, const Time &t)
 {
 	Timestamp ts(d, t);
 	timestamp = ts(false);
-	calcTimeZone();
 	if (timestamp < (SECS_A_DAY/2))
 		timestamp = SECS_A_DAY/2;
+	calcTimeZone();
 }
 
 LocaltimeStamp::LocaltimeStamp(const UTCStamp &u)
 {
 	timestamp = u.getTimestamp();
+	calcTimeZone();
+}
+
+void LocaltimeStamp::sync()
+{
+	timestamp=time(NULL);
 	calcTimeZone();
 }
 

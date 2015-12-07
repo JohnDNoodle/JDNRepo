@@ -27,6 +27,7 @@ public:
 
 	virtual void tickSecs(int seconds);
 	virtual void tickHours(int hours);
+	virtual void sync();
 
 	virtual ~LocaltimeStamp() {};
 };

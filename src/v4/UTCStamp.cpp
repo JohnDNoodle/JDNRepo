@@ -35,25 +35,20 @@ Date UTCStamp::getDate() const
 
 void UTCStamp::tickSecs(int seconds)
 {
-	if(seconds > 0)
-	{
-		timestamp += seconds;				// Sollte seconds auch negativ sein dürfen, da in der Angabe gefordert ist nach timstamp > SECS_A_DAY/2 , oder ist dies nur wegen bereichsüberschreitung?
-		if (timestamp < (SECS_A_DAY/2))
-			timestamp = SECS_A_DAY/2;
-	}
-	else
-		cerr << "No negative ticks allowed!" << endl;
+
+	timestamp += seconds;
+	if (timestamp < (SECS_A_DAY/2))
+		timestamp = SECS_A_DAY/2;
+
+
 }
 void UTCStamp::tickHours(int hours)
 {
-	if(hours > 0)
-		{
-			timestamp += hours*3600;
-			if (timestamp < (SECS_A_DAY/2))
-				timestamp = SECS_A_DAY/2;
-		}
-		else
-			cerr << "No negative ticks allowed!" << endl;
+
+	timestamp += hours*3600;
+	if (timestamp < (SECS_A_DAY/2))
+		timestamp = SECS_A_DAY/2;
+
 }
 
 void UTCStamp::displayStamp(ostream &out) const

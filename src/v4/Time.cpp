@@ -71,14 +71,17 @@ int Time::getMin()const
 }
 int Time::getSec() const
 {
-	return (sectime%3600)%60;
+	return sectime%60;
 }
 
 void Time::displayTime(ostream &out) const
 {
-	out << setfill('0') << setw(2) << getHour() << ':';
-	out << setfill('0') << setw(2) << getMin() << ':';
-	out << setfill('0') << setw(2) << getSec();
+	char prev;
+	prev= out.fill('0');
+
+	out << setw(2) << getHour() << ':';
+	out << setw(2) << getMin() << ':';
+	out << setw(2) << getSec() << setfill(prev);
 
 }
 

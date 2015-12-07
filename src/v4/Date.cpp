@@ -64,9 +64,12 @@ Date::Date(int d, int m, int y)
 
 void Date::displayDate(ostream &out) const
 {
+	char prev;
+
 	out << setw(2) << day << '.';
-	out << setfill('0') << setw(2) << month << '.';
-	out << setw(4) << year;
+	prev= out.fill('0');
+	out << setw(2) << month << '.';
+	out << setw(4) << year << setfill(prev);
 }
 
 ostream &operator<<(ostream & stream, const Date & date)
