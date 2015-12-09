@@ -45,9 +45,13 @@ void UTCStamp::tickSecs(int seconds)
 void UTCStamp::tickHours(int hours)
 {
 
-	timestamp += hours*3600;
+	tickSecs(hours*3600);
+/*
+
+ 	timestamp += hours*3600;
 	if (timestamp < (SECS_A_DAY/2))
 		timestamp = SECS_A_DAY/2;
+*/
 
 }
 

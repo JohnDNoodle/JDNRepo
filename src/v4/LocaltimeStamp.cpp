@@ -35,7 +35,7 @@ LocaltimeStamp::LocaltimeStamp(const UTCStamp &u)
 
 void LocaltimeStamp::sync()
 {
-	timestamp=time(NULL);
+	UTCStamp::sync();
 	calcTimeZone();
 }
 
