@@ -15,15 +15,16 @@ using namespace std;
 LoadSet transferCollection(const Component::Collection &coll)
 {
 	LoadSet retSet;
-	for(vector<const Component *>::const_iterator it = coll.begin(); it != coll.end(); ++it)
+	for(Component::Collection::const_iterator it = coll.begin(); it != coll.end(); ++it)
 	{
-		try
+		Load tempLoad = (dynamic_cast<const Load &>(**it));
+		if(&tempLoad != NULL)
 		{
-			retSet.insert(dynamic_cast<const Load &>(**it));
+			retSet.insert(tempLoad);
 		}
-		catch (bad_cast & ex)
+		else
 		{
-			cerr << ex.what() << endl;
+			cerr << "Problem trying to cast to Load-subclass! Please check component " << (*it)->getName() << endl;
 		}
 
 	}
@@ -32,7 +33,7 @@ LoadSet transferCollection(const Component::Collection &coll)
 
 ostream &operator<<(ostream &stream, const LoadSet &lSet)
 {
-	for(set<Load>::const_iterator it = lSet.begin(); it != lSet.end(); ++it)
+	for(LoadSet::const_iterator it = lSet.begin(); it != lSet.end(); ++it)
 	{
 		stream << (*it).getName() << ":\tVerbrauch: " << (*it).consumption() << " W" << endl;
 	}

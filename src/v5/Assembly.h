@@ -21,7 +21,7 @@ class Assembly : public Component
 {
 	ComponentList m_list;
 public:
-	Assembly(string name) : Component(name) {};
+	Assembly(const string &name) : Component(name) {};
 	void addComponent(Component *comp);
 	ComponentList::size_type removeComponent(Component *comp);
 	float consumption() const;

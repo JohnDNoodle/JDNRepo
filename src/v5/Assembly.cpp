@@ -13,18 +13,16 @@ using namespace std;
 
 void Assembly::addComponent(Component *comp)
 {
-	if (comp != NULL)
-	{
-		m_list.push_back(comp);
-	}
-	else
+	if (comp == NULL)
 	{
 		throw logic_error("Nullpointer cannot be added");
 	}
+	m_list.push_back(comp);
 }
 
 ComponentList::size_type Assembly::removeComponent(Component *comp)
 {
+	ComponentList::size_type retAmount = m_list.size();
 	if (comp != NULL)
 	{
 		m_list.remove(comp);
@@ -33,23 +31,24 @@ ComponentList::size_type Assembly::removeComponent(Component *comp)
 	{
 		m_list.clear();
 	}
-	return m_list.size();
+	retAmount -= m_list.size();
+	return retAmount;
 }
 
 float Assembly::consumption() const
 {
 	float ret = 0.0;
-	for(list<Component *>::const_iterator it = m_list.begin(); it != m_list.end(); ++it)
+	for(ComponentList::const_iterator it = m_list.begin(); it != m_list.end(); ++it)
 	{
-		ret += (**it).consumption();
+		ret += (*it)->consumption();
 	}
 	return ret;
 }
 
 void Assembly::collectAllLoads(Component::Collection &coll)
 {
-	for(list<Component *>::const_iterator it = m_list.begin(); it != m_list.end(); ++it)
+	for(ComponentList::const_iterator it = m_list.begin(); it != m_list.end(); ++it)
 	{
-		(**it).collectAllLoads(coll);
+		(*it)->collectAllLoads(coll);
 	}
 }

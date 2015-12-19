@@ -17,15 +17,11 @@ using namespace std;
 
 float Load::consumption() const
 {
-	if (!(m_dEfficiency == 0.0))
-	{
-		return (m_dPowerOut/m_dEfficiency);
-	}
-	else
+	if ((m_dEfficiency == 0.0))
 	{
 		throw logic_error("Efficiency must not be 0.");
-		return 0.0;
 	}
+	return (m_dPowerOut/m_dEfficiency);
 }
 
 void Load::collectAllLoads(Component::Collection &coll)
@@ -42,7 +38,7 @@ ostream &operator<<(ostream &stream, const Component::Collection &coll)
 {
 	for(vector<const Component *>::const_iterator it = coll.begin(); it != coll.end(); ++it)
 	{
-		stream << (**it).getName() << ":\tVerbrauch: " << (**it).consumption() << " W" << endl;
+		stream << (*it)->getName() << ":\tVerbrauch: " << (*it)->consumption() << " W" << endl;
 	}
 	return stream;
 }
